@@ -88,7 +88,7 @@ class EmployeeDetail extends Component {
         phone = getParam('phone')
         Communications.text(phone,body)
 
-        alert(body+" Terkirim ke "+phone)
+        //alert(body+" Terkirim ke "+phone)
     }
     render() {
         const {getParam} =this.props.navigation
