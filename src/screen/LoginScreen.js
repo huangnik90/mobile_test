@@ -9,7 +9,7 @@ import {Fire } from './../support/firebase'
 import { StackActions, NavigationActions } from 'react-navigation'
 
  class Login extends Component {
-  state={password:'',email:'',loading:true}
+  state={password:'',email:'',loading:true,loadingSignin:false}
 
   componentDidMount(){
     Fire.auth().onAuthStateChanged((user)=>{
@@ -39,12 +39,14 @@ import { StackActions, NavigationActions } from 'react-navigation'
 
   onBtnLogin = ()=>{
     if(this.state.password && this.state.email){
+      this.setState({loadingSignin:true})
       const login = Fire.auth()
       login.signInWithEmailAndPassword(this.state.email,this.state.password)
       .then((val)=>{
           this.props.onLoginSuccess(val.user.email,val.user.uid)
       })
       .catch((err)=>{
+        this.setState({loadingSignin:false})
         alert(err.message)
       })
     }else{
@@ -80,10 +82,15 @@ import { StackActions, NavigationActions } from 'react-navigation'
               <TextInput placeholder='Password' value={this.state.password} onChangeText={(val)=>this.setState({password:val})}></TextInput>
             
             </Item>
-            <Button block onPress={this.onBtnLogin}>
-                  <Icon name="home" size={30}></Icon>  
-                  <Text>Login</Text> 
-            </Button>
+            {
+              this.state.loadingSignin ?
+              <ActivityIndicator size='large' color='black'/>
+              :  <Button block onPress={this.onBtnLogin}>
+              <Icon name="home" size={30}></Icon>  
+              <Text>Login</Text> 
+        </Button>
+            }
+           
             <View style={{flexDirection:"row",alignSelf:"center",justifyContent:"center",alignItems:"center"}}>
                 <View style={{height:60,width:60,}}>
                 <Icon name="facebook-square" size={30}></Icon>  
