@@ -71,6 +71,8 @@
 // // });
 
 import React, { Component } from "react";
+import Communications from 'react-native-communications';
+import {Button} from 'native-base';
 import { 
     View,
     Text,
@@ -78,6 +80,16 @@ import {
 } from "react-native";
 
 class EmployeeDetail extends Component {
+    
+    onBtnSms=()=>{
+        const {getParam} =this.props.navigation
+        body =`Hello ${getParam('nama')},
+        Your upcoming shift is on ${getParam('shift')}`
+        phone = getParam('phone')
+        Communications.text(phone,body)
+
+        alert(body+" Terkirim ke "+phone)
+    }
     render() {
         const {getParam} =this.props.navigation
         return (
@@ -85,6 +97,13 @@ class EmployeeDetail extends Component {
                 <Text>{getParam('nama')}</Text>
                 <Text>{getParam('shift')}</Text>
                 <Text>{getParam('phone')}</Text>
+            <View>
+            <Button block onPress={this.onBtnSms}>
+                 
+                  <Text>Send SMS</Text> 
+            </Button>
+            </View>
+
             </View>
         );
     }
